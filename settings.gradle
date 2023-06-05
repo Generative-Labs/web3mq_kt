@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "web3mq_kt"
+include ':app'
+include ':web3mq'
+include ':walletdemo'
+include ':module_sign'
+include ':module_common'
+include ':sample'
+include ':module_login'
+include ':module_chat'
+include ':module_contact'
+include ':module_new_message'
+include ':module_notification'
+include ':module_profile'

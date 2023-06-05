@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#18181B"
+        android:textSize="14dp"
+        android:text="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/tv_followers_number"/>
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_followers_number"
+        android:text="Followers    |"
+        android:layout_marginLeft="6dp"
+        android:textSize="12dp"
+        android:id="@+id/tv_label_followers"
+        android:textColor="#A1A1AA"/>
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#18181B"
+        android:textSize="14dp"
+        android:text="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/tv_following_number"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/tv_label_followers" />
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_following_number"
+        android:text="Following"
+        android:layout_marginLeft="6dp"
+        android:textSize="12dp"
+        android:textColor="#A1A1AA"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

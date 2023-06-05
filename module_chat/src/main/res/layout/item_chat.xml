@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_dm"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="30dp"
+        android:id="@+id/iv_icon"/>
+
+    <TextView android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/iv_icon"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:textSize="16dp"
+        android:textColor="#18181B"
+        android:id="@+id/tv_title"
+        android:singleLine="true"
+        android:lines="1"
+        android:text="title"
+        android:ellipsize="middle"
+        android:textStyle="bold"/>
+
+    <TextView android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:singleLine="true"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_title"
+        android:text=""
+        android:id="@+id/tv_content"
+        android:textColor="#18181B"/>
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/tv_timestamp"
+        android:textColor="#A1A1AA"
+        android:layout_marginRight="16dp"
+        android:text="Time"/>
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_timestamp"
+        android:layout_marginTop="3dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="1"
+        android:textSize="12dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/shape_red_dot"
+        android:layout_marginRight="16dp"
+        android:visibility="gone"
+        android:id="@+id/tv_unread_count"/>
+
+    <View android:layout_height="1dp"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="#E4E4E7"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

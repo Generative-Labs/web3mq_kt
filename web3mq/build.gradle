@@ -1,0 +1,82 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.protobuf'
+}
+
+android {
+    namespace 'com.ty.web3mq'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 33
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    sourceSets {
+        main {
+            java {
+                srcDir 'src/main/java'
+            }
+            proto {
+                srcDir 'src/main/proto' //指定.proto文件路径
+            }
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        if (osdetector.os == "osx") {
+            artifact = 'com.google.protobuf:protoc:3.17.2:osx-x86_64'
+        } else {
+            artifact = 'com.google.protobuf:protoc:3.17.2'
+        }
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.builtins {
+                java {}// 生产java源码
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    api 'com.google.code.gson:gson:2.8.0'
+    implementation "org.java-websocket:Java-WebSocket:1.5.1"
+    api 'com.google.protobuf:protobuf-java:3.17.2'
+    api 'com.google.protobuf:protoc:3.17.2'
+    implementation 'org.whispersystems:curve25519-android:0.5.0'
+    implementation 'org.whispersystems:signal-protocol-android:2.3.0'
+    implementation 'net.i2p.crypto:eddsa:0.3.0'
+    implementation 'org.web3j:core:4.8.7-android', {
+        exclude module: "okhttp"
+    }
+    implementation "com.goterl:lazysodium-android:5.1.0@aar"
+    implementation "net.java.dev.jna:jna:5.8.0@aar"
+    implementation 'org.mitre.secretsharing:secret-sharing-scheme:1.2.0'
+    implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
+    implementation 'com.github.kittinunf.fuel:fuel-android:2.3.1'
+}
