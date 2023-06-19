@@ -2,7 +2,22 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.protobuf'
+    id 'maven-publish'
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.Generative-Labs'
+                artifactId = 'web3-mq-kt'
+                version = '1.0.0'
+            }
+        }
+    }
+}
+
 
 android {
     namespace 'com.ty.web3mq'
