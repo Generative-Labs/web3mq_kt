@@ -12,10 +12,9 @@ object ModuleLogin {
      * 启动
      */
     fun launch(context: Context) {
-//        ARouter.getInstance().build(RouterPath.LOGIN_START)
-//            .withObject(Constants.ROUTER_KEY_UI_CONFIG_START, loginConfig.uiConfigStart)
-//            .navigation()
+
         var intent = Intent(context, StartActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         context.startActivity(intent)
     }
 

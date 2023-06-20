@@ -4,7 +4,6 @@ import com.ty.web3mq.http.ApiConfig
 import com.ty.web3mq.http.HttpManager
 import com.ty.web3mq.http.request.ChatRequest
 import com.ty.web3mq.http.request.UpdateChatRequest
-import com.ty.web3mq.http.response.BaseResponse
 import com.ty.web3mq.http.response.ChatResponse
 import com.ty.web3mq.http.response.CommonResponse
 import com.ty.web3mq.interfaces.GetChatsCallback

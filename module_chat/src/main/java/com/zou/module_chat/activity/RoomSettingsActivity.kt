@@ -67,6 +67,7 @@ class RoomSettingsActivity : BaseActivity() {
                         adapter = RoomMembersAdapter(groupMembersBean.result!!, this@RoomSettingsActivity)
                         adapter!!.setOnAddPeopleClickListener(object : RoomMembersAdapter.OnAddPeopleClickListener{
                             override fun onAddPeopleClick() {
+                                InviteGroupFragment.setGroupID(group_id!!)
                                 InviteGroupFragment.show(getSupportFragmentManager(), "invite people")
                             }
                         })

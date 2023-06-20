@@ -25,7 +25,7 @@ import web3mq.Message
 object ChatsFragment : BaseFragment(), ChatsMessageCallback {
     private val TAG = "ChatsFragment"
     private val INIT_CHATS_SIZE = 100
-    private val chats: ArrayList<ChatItem> = ArrayList<ChatItem>()
+    private var chats: ArrayList<ChatItem> = ArrayList<ChatItem>()
     private var chatsAdapter: ChatsAdapter? = null
     private var recycler_view_chats: Web3MQListView? = null
     private var toNewMessageListener: ToNewMessageListener? = null
@@ -40,21 +40,24 @@ object ChatsFragment : BaseFragment(), ChatsMessageCallback {
         super.onBaseCreateView()
         initView()
         setListener()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         requestData()
-        //        ArrayList<ChatItem> local_chats = Tools.getChatItemList();
-//        if(local_chats!=null){
-//            chats = local_chats;
-//            updateView();
-//        }else{
-//
-//        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         Log.i(TAG, "hidden:$hidden")
         super.onHiddenChanged(hidden)
         this.hidden = hidden
+        if(!hidden){
+            requestData()
+        }
     }
+
+
 
     fun setToNewMessageListener(toNewMessageListener: ToNewMessageListener?) {
         this.toNewMessageListener = toNewMessageListener
@@ -72,7 +75,7 @@ object ChatsFragment : BaseFragment(), ChatsMessageCallback {
         for (i in chats.indices) {
             val chatItem: ChatItem = chats[i]
             when (chatItem.chat_type) {
-                ChatItem.CHAT_TYPE_USER -> if (message.getComeFrom().equals(chatItem.chatid)) {
+                ChatItem.CHAT_TYPE_USER -> if (message.getComeFrom().equals(chatItem.chatid) && message.getContentTopic().startsWith("user:")) {
                     chatItem.unreadCount += 1
                     chatItem.content = message.getPayload().toStringUtf8()
                     chatItem.timestamp = message.getTimestamp()
@@ -80,7 +83,7 @@ object ChatsFragment : BaseFragment(), ChatsMessageCallback {
                     //                        Tools.updateChatItem(chatItem.chatid,chatItem.content,chatItem.timestamp,chatItem.unreadCount);
                     exist = true
                 }
-                ChatItem.CHAT_TYPE_GROUP -> if (message.getContentTopic().equals(chatItem.chatid)) {
+                ChatItem.CHAT_TYPE_GROUP -> if (message.getContentTopic().equals(chatItem.chatid) && message.getContentTopic().startsWith("group:")) {
                     chatItem.unreadCount += 1
                     chatItem.content = message.getPayload().toStringUtf8()
                     chatItem.timestamp = message.getTimestamp()

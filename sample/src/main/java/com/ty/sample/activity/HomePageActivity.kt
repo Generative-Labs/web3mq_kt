@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
@@ -38,6 +39,7 @@ class HomePageActivity : AppCompatActivity() {
     private var currentFragment: Fragment? = null
     private var bottom_navigation_view: BottomNavigationView? = null
     private var cl_reconnect: ConstraintLayout? = null
+    private var btn_reconnect: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
@@ -58,8 +60,6 @@ class HomePageActivity : AppCompatActivity() {
             override fun onClose() {
                     //TODO showReconnectDialog
                     cl_reconnect!!.visibility = View.VISIBLE
-                    Web3MQClient.reconnect()
-                    sendConnectCommand()
                 }
             })
         initView()
@@ -80,10 +80,17 @@ class HomePageActivity : AppCompatActivity() {
     private fun initView() {
         bottom_navigation_view = findViewById(R.id.bottom_navigation_view)
         cl_reconnect = findViewById(R.id.cl_reconnect)
+        btn_reconnect = findViewById(R.id.btn_reconnect)
         switchContent(ChatsFragment)
     }
 
     private fun setListener() {
+        btn_reconnect!!.setOnClickListener {
+            Web3MQClient.reconnect()
+            sendConnectCommand()
+            cl_reconnect!!.visibility = View.GONE
+        }
+
         bottom_navigation_view!!.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_chats -> {
@@ -147,6 +154,7 @@ class HomePageActivity : AppCompatActivity() {
     private fun listenToNotificationMessageEvent() {
         Web3MQNotification.setOnNotificationMessageEvent(object : NotificationMessageCallback {
                 override fun onNotificationMessage(response: ArrayList<NotificationBean>) {
+                    Log.i(TAG,"onNotificationMessage")
                     showRedDot(2)
                 }
             })

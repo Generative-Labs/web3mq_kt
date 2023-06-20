@@ -50,6 +50,7 @@ class FollowersFragment : BaseFragment() {
     private fun requestData() {
         Web3MQFollower.getMyFollowers(1, 20, object : GetMyFollowersCallback{
             override fun onSuccess(str: String?) {
+                list_followers!!.setRefreshing(false)
                 val followersBean: FollowersBean = ConvertUtil.convertJsonToFollowersBean(str)!!
                 val followerBeans: ArrayList<FollowerBean> = followersBean.user_list!!
                 items.clear()
@@ -70,6 +71,7 @@ class FollowersFragment : BaseFragment() {
             }
 
             override fun onFail(error: String?) {
+                list_followers!!.setRefreshing(false)
                 list_followers!!.showEmptyView()
             }
         })

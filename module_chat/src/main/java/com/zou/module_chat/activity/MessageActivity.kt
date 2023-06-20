@@ -154,6 +154,7 @@ class MessageActivity : BaseActivity() {
             et_message!!.setText("")
         })
         btn_add_member!!.setOnClickListener {
+            InviteGroupFragment.setGroupID(chat_id!!)
             InviteGroupFragment.show(getSupportFragmentManager(), "invite people")
         }
         btn_more!!.setOnClickListener {

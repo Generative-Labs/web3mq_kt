@@ -1,17 +1,12 @@
 package com.ty.web3mq
 import com.ty.web3mq.http.ApiConfig
 import com.ty.web3mq.http.HttpManager
-import com.ty.web3mq.http.beans.FollowBean
 import com.ty.web3mq.http.request.AddFriendsRequest
 import com.ty.web3mq.http.request.FollowRequest
 import com.ty.web3mq.http.request.GetFollowerRequest
-import com.ty.web3mq.http.response.BaseResponse
 import com.ty.web3mq.http.response.CommonResponse
 import com.ty.web3mq.http.response.FollowResponse
-import com.ty.web3mq.interfaces.FollowCallback
-import com.ty.web3mq.interfaces.GetMyFollowersCallback
-import com.ty.web3mq.interfaces.GetMyFollowingCallback
-import com.ty.web3mq.interfaces.SendFriendRequestCallback
+import com.ty.web3mq.interfaces.*
 import com.ty.web3mq.utils.CommonUtils
 import com.ty.web3mq.utils.DefaultSPHelper
 import com.ty.web3mq.utils.Ed25519
@@ -61,7 +56,16 @@ Issued At: $str_date"""
                 object : HttpManager.Callback<FollowResponse> {
                     override fun onResponse(response: FollowResponse) {
                         if (response.code == 0) {
-                            callback.onSuccess()
+                            Web3MQChats.updateMyChat(timeStamp, target_userid, "user", object :UpdateMyChatCallback{
+                                    override fun onSuccess(){
+                                        callback.onSuccess()
+                                    }
+
+                                    override fun onFail(error: String){
+                                        callback.onFail("update chat error")
+                                    }
+                                })
+
                         } else {
                             callback.onFail(
                                 "error code: " + response.code

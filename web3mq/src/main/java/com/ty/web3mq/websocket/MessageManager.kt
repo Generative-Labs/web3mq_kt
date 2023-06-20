@@ -89,11 +89,11 @@ object MessageManager {
                         }
                         //TODO
 
-//                        handler.post {
-//                            notificationMessageCallback!!.onNotificationMessage(
-//                                notificationList
-//                            )
-//                        }
+                        handler.post {
+                            notificationMessageCallback!!.onNotificationMessage(
+                                notificationList
+                            )
+                        }
                     } catch (e: InvalidProtocolBufferException) {
                         e.printStackTrace()
                         Log.e(TAG, "NotificationListResp parse error")

@@ -42,8 +42,6 @@ class StartActivity : BaseActivity() {
 
             }
         })
-
-
     }
 
     private fun initView() {

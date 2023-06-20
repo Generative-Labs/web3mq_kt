@@ -31,7 +31,11 @@ object InviteGroupFragment : BottomSheetDialogFragment() {
     private var dialog: BottomSheetDialog? = null
     private var allFollower: ArrayList<FollowerBean> = ArrayList<FollowerBean>()
     private val shownFollower: ArrayList<FollowerBean> = ArrayList<FollowerBean>()
-    private val group_id: String? = null
+    private var group_id: String? = null
+    public fun setGroupID(group_id: String){
+        this.group_id = group_id
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         requestData()
@@ -83,8 +87,8 @@ object InviteGroupFragment : BottomSheetDialogFragment() {
                 for (follower in adapter!!.getCheckedFollower()) {
                     invite_user_id.add(follower.userid!!)
                 }
-                val bundle = arguments
-                val group_id = bundle!!.getString("group_id")
+//                val bundle = arguments
+//                val group_id = bundle!!.getString("group_id")
                 inviteMember(group_id, invite_user_id)
             }
         }

@@ -1,5 +1,6 @@
 package com.zou.module_chat.utils
 
+import android.util.Log
 import com.google.gson.reflect.TypeToken
 import com.ty.web3mq.utils.DefaultSPHelper
 import com.zou.module_chat.bean.ChatItem
@@ -17,6 +18,7 @@ object Tools {
     //        return itemList;
     //    }
     fun saveChatItemList(chatItems: ArrayList<ChatItem>?) {
+        Log.i("saveChatItemList", "saveChatItemList");
         DefaultSPHelper.put("ChatItem", chatItems)
     }
 
