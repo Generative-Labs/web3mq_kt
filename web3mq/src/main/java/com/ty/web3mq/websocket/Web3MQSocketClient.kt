@@ -74,13 +74,13 @@ class Web3MQSocketClient(var serverUri: URI?) : WebSocketClient(serverUri) {
             TAG,
             "WebSocketClient onClose code:$code reason:$reason remote:$remote"
         )
-        if (onWebsocketClosedCallback != null) {
-            onWebsocketClosedCallback!!.onClose()
-        }
+        onWebsocketClosedCallback?.onClose()
+        callback?.onFail("WebSocketClient onClose code:$code reason:$reason remote:$remote")
     }
 
     override fun onError(ex: Exception) {
         Log.e(TAG, "WebSocketClient onError " + ex.localizedMessage)
+        ex.localizedMessage?.let { callback?.onFail(it) }
     }
 
     fun setConnectCallback(connectCallback: ConnectCallback?) {

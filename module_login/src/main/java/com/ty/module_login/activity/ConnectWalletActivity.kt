@@ -36,6 +36,11 @@ class ConnectWalletActivity : BaseActivity() {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
                 startActivity(intent)
             }
+
+            override fun onError(error: String) {
+                Toast.makeText(this@ConnectWalletActivity, error, Toast.LENGTH_SHORT).show()
+                this@ConnectWalletActivity.finish()
+            }
         })
         Web3MQSign.setOnConnectResponseCallback(object : OnConnectResponseCallback{
             override fun onApprove(walletInfo: BridgeMessageMetadata, address: String) {
@@ -55,14 +60,6 @@ class ConnectWalletActivity : BaseActivity() {
                         override fun onUserNotRegister() {
                             // user not register
                             Log.i(TAG, "getUserInfo onUserNotRegister")
-//                            ARouter.getInstance().build(RouterPath.LOGIN_REGISTER)
-//                                .withString(Constants.ROUTER_KEY_LOGIN_WALLET_NAME, walletName)
-//                                .withString(Constants.ROUTER_KEY_LOGIN_WALLET_TYPE, walletType)
-//                                .withString(
-//                                    Constants.ROUTER_KEY_LOGIN_WALLET_ADDRESS, address.lowercase(
-//                                        Locale.getDefault()
-//                                    )
-//                                ).navigation()
                             val intent = Intent(this@ConnectWalletActivity, RegisterActivity::class.java)
                             intent.putExtra(Constants.ROUTER_KEY_LOGIN_WALLET_NAME, walletName)
                             intent.putExtra(Constants.ROUTER_KEY_LOGIN_WALLET_TYPE,walletType)
@@ -84,6 +81,7 @@ class ConnectWalletActivity : BaseActivity() {
             override fun onReject() {
                 Toast.makeText(this@ConnectWalletActivity, "connect rejected", Toast.LENGTH_SHORT)
                     .show()
+                finish()
             }
         })
     }

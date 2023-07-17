@@ -115,36 +115,10 @@ object Ed25519 {
     }
 
     fun bytesToHexString(src: ByteArray?): String {
-//        val builder = StringBuilder()
-//        if (src == null || src.size <= 0) {
-//            return null
-//        }
-//        var hv: String
-//        for (i in src.indices) {
-//            // 以十六进制（基数 16）无符号整数形式返回一个整数参数的字符串表示形式，并转换为大写
-//            hv = Integer.toHexString((src[i] and 0xFF.toByte()).toInt()).uppercase(Locale.getDefault())
-//            if (hv.length < 2) {
-//                builder.append(0)
-//            }
-//            builder.append(hv)
-//        }
-        return src!!.joinToString("") { "%02X".format(it) }
+        return src!!.joinToString("") { "%02x".format(it) }
     }
 
     fun hexStringToBytes(hexString: String?): ByteArray {
-//        var hexString = hexString ?: return null
-//        hexString = hexString.lowercase(Locale.getDefault())
-//        val byteArray = ByteArray(hexString.length shr 1)
-//        var index = 0
-//        for (i in 0 until hexString.length) {
-//            if (index > hexString.length - 1) {
-//                return byteArray
-//            }
-//            val highDit = (hexString[index].digitToIntOrNull(16) ?: -1 and 0xFF).toInt()
-//            val lowDit = (hexString[index + 1].digitToIntOrNull(16) ?: -1 and 0xFF).toInt()
-//            byteArray[i] = (highDit shl 4 or lowDit).toByte()
-//            index += 2
-//        }
         return hexString!!.chunked(2).map { it.toInt(16).toByte() }.toByteArray()
     }
 }

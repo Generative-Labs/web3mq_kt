@@ -39,7 +39,7 @@
         android:layout_height="32dp"
         android:background="@drawable/shape_bg_btn_follow"
         android:text="Follow"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/color_base_white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

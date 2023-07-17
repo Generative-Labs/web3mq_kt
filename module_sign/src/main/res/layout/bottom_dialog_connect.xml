@@ -141,7 +141,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:text="Connect"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/color_base_white"
         android:textAllCaps="false"
         android:theme="@null"
         android:id="@+id/btn_connect"/>

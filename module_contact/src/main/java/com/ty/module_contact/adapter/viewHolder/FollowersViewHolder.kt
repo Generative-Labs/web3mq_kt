@@ -32,7 +32,7 @@ class FollowersViewHolder(itemView: View, private val context: Context) :
         }
         if (follower.follow_status == Constants.FOLLOW_STATUS_FOLLOWER) {
             btn_follow.setBackgroundResource(com.ty.module_common.R.drawable.shape_bg_btn_follow)
-            btn_follow.setTextColor(Color.parseColor("#FFFFFF"))
+            btn_follow.setTextColor(context.getColor(com.ty.module_common.R.color.color_base_white))
             btn_follow.text = "Follow"
         } else {
             btn_follow.setBackgroundResource(com.ty.module_common.R.drawable.shape_bg_btn_following)

@@ -12,7 +12,6 @@ import com.goterl.lazysodium.exceptions.SodiumException
 import com.goterl.lazysodium.interfaces.Sign
 import com.ty.web3mq.interfaces.*
 import com.ty.web3mq.utils.*
-import com.ty.web3mq.utils.CryptoUtils.toHex
 import com.ty.web3mq.websocket.MessageManager
 import com.ty.web3mq.websocket.bean.*
 import com.ty.web3mq.websocket.bean.sign.Participant
@@ -67,7 +66,7 @@ object Web3MQSign {
     fun init(dAppID: String, callback: BridgeConnectCallback?) {
         if (Web3MQClient.getNodeId() == null || !Web3MQClient.getSocketClient()!!.isOpen()
         ) {
-            Log.e(TAG, "websocket not connect")
+            callback!!.onError("websocket not connect")
             return
         }
         this.dAppID = dAppID
@@ -315,8 +314,8 @@ object Web3MQSign {
         Log.i(TAG, "targetPubKey:" + currentSession.peerParticipant!!.ed25519Pubkey.toString() + "")
         message.content = Base64.encodeToString(
             encryptionContent(
-                Ed25519.hexStringToBytes(currentSession.peerParticipant!!.ed25519Pubkey)!!,
-                Ed25519.hexStringToBytes(currentSession.selfParticipant!!.ed25519PrvKey)!!,
+                Ed25519.hexStringToBytes(currentSession.peerParticipant!!.ed25519Pubkey),
+                Ed25519.hexStringToBytes(currentSession.selfParticipant!!.ed25519PrvKey),
                 json_content.toByteArray()
             ), Base64.NO_WRAP
         )

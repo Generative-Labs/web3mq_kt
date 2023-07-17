@@ -47,13 +47,13 @@ object Web3MQClient{
         socketClient!!.setOnWebsocketClosedCallback(callback)
     }
 
-    fun reconnect() {
-        try {
-            socketClient!!.reconnectBlocking()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-    }
+//    fun reconnect() {
+//        try {
+//            socketClient!!.reconnectBlocking()
+//        } catch (e: InterruptedException) {
+//            e.printStackTrace()
+//        }
+//    }
 
     fun startConnect(connectCallback: ConnectCallback?) {
         node_id = DefaultSPHelper.getNodeID()

@@ -34,12 +34,12 @@ class MessageActivity : BaseActivity() {
     var chat_type: String? = null
     private val messageList: ArrayList<MessageItem> = ArrayList<MessageItem>()
     private var adapter: MessagesAdapter? = null
-    private var list_message: Web3MQListView? = null
-    private var tv_title_user_id: TextView? = null
-    private var btn_send: ImageButton? = null
-    private var btn_add_member: ImageButton? = null
-    private var btn_more: ImageButton? = null
-    private var et_message: EditText? = null
+    private lateinit var list_message: Web3MQListView
+    private lateinit var tv_title_user_id: TextView
+    private lateinit var btn_send: ImageButton
+    private lateinit var btn_add_member: ImageButton
+    private lateinit var btn_more: ImageButton
+    private lateinit var et_message: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent(R.layout.activity_message)
@@ -56,7 +56,7 @@ class MessageActivity : BaseActivity() {
                 override fun onSuccess(messagesBean: MessagesBean) {
                     messageList.clear()
                     if (messagesBean.total > 0) {
-                        list_message!!.hideEmptyView()
+                        list_message.hideEmptyView()
                         for (msg in messagesBean.result!!) {
                             val messageItem = MessageItem()
                             messageItem.from = msg.from
@@ -68,7 +68,7 @@ class MessageActivity : BaseActivity() {
                         }
                         updateView()
                     } else {
-                        list_message!!.showEmptyView()
+                        list_message.showEmptyView()
                         val timeStamp = System.currentTimeMillis()
                         Web3MQChats.updateMyChat(
                             timeStamp,
@@ -99,27 +99,11 @@ class MessageActivity : BaseActivity() {
 //                list_message.setRefreshing(false);
                 }
             })
-
-//        if(chat_type.equals(Constants.CHAT_TYPE_GROUP)){
-//            Web3MQGroup.getInstance().getGroupMembers(1,500,chat_id, new GetGroupMembersCallback() {
-//                @Override
-//                public void onSuccess(GroupMembersBean groupMembersBean) {
-//                    if(groupMembersBean.total>0){
-//
-//                    }
-//                }
-//
-//                @Override
-//                public void onFail(String error) {
-//
-//                }
-//            });
-//        }
     }
 
     private fun initView() {
         tv_title_user_id = findViewById(R.id.tv_title_user_id)
-        tv_title_user_id!!.text = chat_id
+        tv_title_user_id.text = chat_id
         list_message = findViewById(R.id.list_message)
         btn_send = findViewById(R.id.btn_send)
         et_message = findViewById(R.id.et_message)
@@ -127,19 +111,19 @@ class MessageActivity : BaseActivity() {
         btn_more = findViewById(R.id.btn_more)
         when (chat_type) {
             Constants.CHAT_TYPE_USER -> {
-                btn_add_member!!.visibility = View.GONE
-                btn_more!!.visibility = View.GONE
+                btn_add_member.visibility = View.GONE
+                btn_more.visibility = View.GONE
             }
             Constants.CHAT_TYPE_GROUP -> {
-                btn_add_member!!.visibility = View.VISIBLE
-                btn_more!!.visibility = View.VISIBLE
+                btn_add_member.visibility = View.VISIBLE
+                btn_more.visibility = View.VISIBLE
             }
         }
     }
 
     private fun setListener() {
-        btn_send!!.setOnClickListener(View.OnClickListener {
-            val message = et_message!!.text.toString()
+        btn_send.setOnClickListener(View.OnClickListener {
+            val message = et_message.text.toString()
             if (TextUtils.isEmpty(message)) {
                 return@OnClickListener
             }
@@ -151,13 +135,13 @@ class MessageActivity : BaseActivity() {
             messageItem.isMine = true
             updateMessage(messageItem)
             CommonUtils.hideKeyboard(this@MessageActivity)
-            et_message!!.setText("")
+            et_message.setText("")
         })
-        btn_add_member!!.setOnClickListener {
+        btn_add_member.setOnClickListener {
             InviteGroupFragment.setGroupID(chat_id!!)
             InviteGroupFragment.show(getSupportFragmentManager(), "invite people")
         }
-        btn_more!!.setOnClickListener {
+        btn_more.setOnClickListener {
             val intent: Intent = Intent(this@MessageActivity, RoomSettingsActivity::class.java)
             intent.putExtra(Constants.INTENT_GROUP_ID, chat_id)
             startActivity(intent)
@@ -191,31 +175,31 @@ class MessageActivity : BaseActivity() {
 
     private fun updateMessage(messageItem: MessageItem) {
         messageList.add(messageItem)
-        list_message!!.hideEmptyView()
+        list_message.hideEmptyView()
         if (adapter == null) {
             adapter = MessagesAdapter(messageList, this@MessageActivity)
-            list_message!!.setAdapter(adapter)
+            list_message.setAdapter(adapter)
         } else {
             adapter!!.notifyItemInserted(messageList.size)
         }
-        list_message!!.scrollTo(messageList.size - 1)
+        list_message.scrollTo(messageList.size - 1)
         Tools.updateChatItem(chat_id, messageItem.content!!, messageItem.timestamp, 0)
     }
 
     private fun updateView() {
         if (messageList.size > 0) {
-            list_message!!.hideEmptyView()
+            list_message.hideEmptyView()
         } else {
-            list_message!!.showEmptyView()
+            list_message.showEmptyView()
             return
         }
         if (adapter == null) {
             adapter = MessagesAdapter(messageList, this@MessageActivity)
-            list_message!!.setAdapter(adapter)
+            list_message.setAdapter(adapter)
         } else {
             adapter!!.notifyDataSetChanged()
         }
-        list_message!!.scrollTo(messageList.size - 1)
+        list_message.scrollTo(messageList.size - 1)
         Tools.updateChatItem(
             chat_id,
             messageList[messageList.size - 1].content!!,

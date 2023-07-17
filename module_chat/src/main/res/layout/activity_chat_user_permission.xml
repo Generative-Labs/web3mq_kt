@@ -35,7 +35,7 @@
         android:background="@drawable/shape_bg_btn_follow_profile"
         android:text="Request"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/color_base_white"
         android:id="@+id/btn_action"/>
 
     <Button android:layout_width="172dp"
@@ -61,7 +61,7 @@
         android:background="@drawable/shape_bg_btn_follow_profile"
         android:text="Follow"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/color_base_white"
         android:id="@+id/btn_follow"/>
 
     <TextView android:layout_width="0dp"

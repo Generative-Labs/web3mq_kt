@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.ty.module_common.R
 
 open class BaseFragment : Fragment() {
-    protected var rootView: ConstraintLayout? = null
+    protected lateinit var rootView: ConstraintLayout
     private var layoutId = 0
     private var cl_loading: ConstraintLayout? = null
     private var iv_loading: ImageView? = null

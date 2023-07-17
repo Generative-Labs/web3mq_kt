@@ -35,33 +35,15 @@ import com.zou.module_chat.ModuleChat
 import com.zou.module_chat.fragment.ChatsFragment
 import java.util.ArrayList
 
-class HomePageActivity : AppCompatActivity() {
-    private var currentFragment: Fragment? = null
-    private var bottom_navigation_view: BottomNavigationView? = null
-    private var cl_reconnect: ConstraintLayout? = null
-    private var btn_reconnect: Button? = null
+class HomePageActivity : AppCompatActivity(),ConnectCallback {
+    private lateinit var currentFragment: Fragment
+    private lateinit var bottom_navigation_view: BottomNavigationView
+    private lateinit var cl_reconnect: ConstraintLayout
+    private lateinit var btn_reconnect: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
-        Web3MQClient.startConnect(object : ConnectCallback{
-            override fun onSuccess() {
-                sendConnectCommand()
-            }
-
-            override fun onFail(error: String) {
-                Toast.makeText(this@HomePageActivity, "init fail", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun alreadyConnected() {
-                sendConnectCommand()
-            }
-        })
-        Web3MQClient.setOnWebsocketClosedCallback(object : OnWebsocketClosedCallback {
-            override fun onClose() {
-                    //TODO showReconnectDialog
-                    cl_reconnect!!.visibility = View.VISIBLE
-                }
-            })
+        Web3MQClient.startConnect(this)
         initView()
         setListener()
         listenToNotificationMessageEvent()
@@ -72,7 +54,7 @@ class HomePageActivity : AppCompatActivity() {
         Web3MQClient.sendConnectCommand(object : OnConnectCommandCallback{
             override fun onConnectCommandResponse() {
                 Log.i(TAG, "onConnectCommandResponse Success")
-                cl_reconnect!!.visibility = View.GONE
+                cl_reconnect.visibility = View.GONE
             }
         })
     }
@@ -85,13 +67,15 @@ class HomePageActivity : AppCompatActivity() {
     }
 
     private fun setListener() {
-        btn_reconnect!!.setOnClickListener {
-            Web3MQClient.reconnect()
-            sendConnectCommand()
-            cl_reconnect!!.visibility = View.GONE
+        btn_reconnect.setOnClickListener {
+            Web3MQClient.startConnect(this)
+            cl_reconnect.visibility = View.GONE
+        }
+        btn_reconnect.setOnClickListener {
+            Web3MQClient.startConnect(this)
         }
 
-        bottom_navigation_view!!.setOnItemSelectedListener { item ->
+        bottom_navigation_view.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_chats -> {
                     switchContent(ChatsFragment)
@@ -221,5 +205,17 @@ class HomePageActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "HomePageActivity"
+    }
+
+    override fun onSuccess() {
+        sendConnectCommand()
+    }
+
+    override fun onFail(error: String) {
+        cl_reconnect.visibility = View.VISIBLE
+    }
+
+    override fun alreadyConnected() {
+        sendConnectCommand()
     }
 }

@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.ty.module_common.fragment.BaseFragment
@@ -24,42 +25,38 @@ import com.ty.web3mq.utils.AppUtils
 import com.ty.web3mq.websocket.bean.BridgeMessageMetadata
 import com.ty.web3mq.websocket.bean.sign.Participant
 
-class WalletSignFragment : BaseFragment() {
+class WalletSignFragment : BaseFragment(), ConnectCallback{
 
     private var bottomSheetDialog: BottomSheetDialog? = null
     private var connectCallback: OnConnectCallback? = null
     private var onSignCallback: OnSignCallback? = null
+    private var dAppID: String? = null
+    private var topicId: String? = null
+    private var pubKey: String? = null
+    private var callback: WalletInitCallback? = null
+    private lateinit var cl_reconnect: ConstraintLayout
+    private lateinit var btn_reconnect: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent(R.layout.fragment_wallet_sign)
     }
 
+    override fun onBaseCreateView() {
+        super.onBaseCreateView()
+        cl_reconnect = rootView.findViewById(R.id.cl_reconnect)
+        btn_reconnect = rootView.findViewById(R.id.btn_reconnect)
+        btn_reconnect.setOnClickListener {
+            Web3MQClient.startConnect(this)
+            cl_reconnect.visibility = View.GONE
+        }
+    }
+
     fun init(dAppID: String, topicId: String, pubKey: String, callback: WalletInitCallback) {
-        Web3MQClient.startConnect(object : ConnectCallback{
-            override fun onSuccess() {
-                Web3MQSign.init(dAppID, object : BridgeConnectCallback {
-                    override fun onConnectCallback() {
-                        callback.initSuccess()
-                    }
-                })
-                Web3MQSign.setTargetTopicID(topicId)
-                Web3MQSign.setTargetPubKey(pubKey)
-            }
-
-            override fun onFail(error: String) {
-                callback.onFail("connect websocket error:$error")
-            }
-
-            override fun alreadyConnected() {
-                Web3MQSign.init(dAppID, object : BridgeConnectCallback {
-                    override fun onConnectCallback() {
-                        callback.initSuccess()
-                    }
-                })
-                Web3MQSign.setTargetTopicID(topicId)
-                Web3MQSign.setTargetPubKey(pubKey)
-            }
-        })
+        this.dAppID = dAppID
+        this.topicId = topicId
+        this.pubKey = pubKey
+        this.callback = callback
+        Web3MQClient.startConnect(this)
     }
 
     fun setOnSignCallback(onSignCallback: OnSignCallback?) {
@@ -107,10 +104,7 @@ class WalletSignFragment : BaseFragment() {
             connectCallback?.connectReject()
         }
         bottomSheetDialog!!.setContentView(view)
-//        bottomSheetDialog!!.window!!.findViewById<View>(R.id.design_bottom_sheet)
-//            .setBackgroundResource(android.R.color.transparent)
         bottomSheetDialog!!.show()
-
     }
 
     fun showSignBottomDialog(
@@ -171,15 +165,42 @@ class WalletSignFragment : BaseFragment() {
             }
         }
         bottomSheetDialog!!.setContentView(view)
-//        bottomSheetDialog!!.window!!.findViewById<View>(R.id.design_bottom_sheet)
-//            .setBackgroundResource(android.R.color.transparent)
         bottomSheetDialog!!.show()
+    }
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                btn_sign.performClick();
-//            }
-//        },3000);
+    override fun onSuccess() {
+        Web3MQSign.init(dAppID!!, object : BridgeConnectCallback {
+            override fun onConnectCallback() {
+                callback!!.initSuccess()
+            }
+
+            override fun onError(error: String) {
+                callback!!.onFail(error)
+            }
+        })
+        Web3MQSign.setTargetTopicID(topicId!!)
+        Web3MQSign.setTargetPubKey(pubKey!!)
+    }
+
+    override fun onFail(error: String) {
+        requireActivity().runOnUiThread {
+            cl_reconnect.visibility = View.VISIBLE
+            bottomSheetDialog?.dismiss()
+            callback?.onFail("connect websocket error:$error")
+        }
+    }
+
+    override fun alreadyConnected() {
+        Web3MQSign.init(dAppID!!, object : BridgeConnectCallback {
+            override fun onConnectCallback() {
+                callback?.initSuccess()
+            }
+
+            override fun onError(error: String) {
+                callback?.onFail(error)
+            }
+        })
+        Web3MQSign.setTargetTopicID(topicId!!)
+        Web3MQSign.setTargetPubKey(pubKey!!)
     }
 }

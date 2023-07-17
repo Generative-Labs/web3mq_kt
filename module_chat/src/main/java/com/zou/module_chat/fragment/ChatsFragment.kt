@@ -124,6 +124,7 @@ object ChatsFragment : BaseFragment(), ChatsMessageCallback {
                 }
                 fixChatItemWithLocal()
                 updateView()
+                Tools.saveChatItemList(chats)
             }
 
             override fun onFail(error: String) {

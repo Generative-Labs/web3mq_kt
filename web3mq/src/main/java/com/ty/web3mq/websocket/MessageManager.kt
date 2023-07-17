@@ -90,7 +90,7 @@ object MessageManager {
                         //TODO
 
                         handler.post {
-                            notificationMessageCallback!!.onNotificationMessage(
+                            notificationMessageCallback?.onNotificationMessage(
                                 notificationList
                             )
                         }

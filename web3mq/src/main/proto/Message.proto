@@ -17,6 +17,8 @@ message Web3MQMessage {
   string nodeId = 12;
   string validatePubKey = 13;
   map<string, string> extraData = 14;
+  string threadId = 15;
+  string replyId = 16; /// reply message id
 }
 
 

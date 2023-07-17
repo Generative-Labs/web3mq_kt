@@ -1,10 +1,8 @@
 package com.ty.walletdemo
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -22,33 +20,40 @@ import com.ty.module_sign.interfaces.WalletInitCallback
 import com.ty.web3mq.Web3MQClient
 import com.ty.web3mq.Web3MQSign
 import com.ty.web3mq.WebsocketConfig
-import com.ty.web3mq.interfaces.ConnectCallback
 import com.ty.web3mq.interfaces.OnSignRequestMessageCallback
-import com.ty.web3mq.interfaces.OnWebsocketClosedCallback
 import com.ty.web3mq.utils.ConvertUtil
 import com.ty.web3mq.utils.CryptoUtils
 import com.ty.web3mq.utils.DefaultSPHelper
 import com.ty.web3mq.utils.RandomUtils
 import com.ty.web3mq.websocket.bean.BridgeMessageMetadata
 import com.ty.web3mq.websocket.bean.ConnectRequest
-import com.ty.web3mq.websocket.bean.SignRequest
 import com.ty.web3mq.websocket.bean.sign.Participant
-import com.ty.web3mq.websocket.bean.sign.Web3MQSession
+import io.github.g00fy2.quickie.QRResult
+import io.github.g00fy2.quickie.ScanQRCode
 
 class MainActivity : AppCompatActivity() {
     private var walletSignFragment: WalletSignFragment? = null
     private val api_key = "rkkJARiziBQCscgg"
     private val dAppID = "web3MQ_test_wallet:wallet"
-    private val ETH_ADDRESS = "0x715b3B0Bd7881A79817E2360EebB907f780eb396"
-    private val ETH_PRV_KEY = "6f01b0237e05cec10b5f694c008ffb19dfeea39b34940592eb7989013812c71b"
-//    private val ETH_ADDRESS = "0x3f4a4aeb6c2aea7f9cd8b6a753958bef559c92b0"
-//    private val ETH_PRV_KEY = "18b5afba7ecd83dfe42e20edc6c3d65a9351051cbd2a0e5c573b1fdf13380c2f"
-    private var iv_scan: ImageView? = null
+    private val ETH_ADDRESS = "0x0dBED6A18d4026B6B637AA9f89DE4a6aCc861D84"
+    private val ETH_PRV_KEY = "620db3575a3cd921e6c5dd91a9fce59573349f2f5dd81f84ae25e82c2275f4c2"
+    private lateinit var iv_scan: ImageView
 
     //    private String handling_connect_uri = null;
     private var btn_toggle: ToggleButton? = null
     private var fromRemote = false
     private var handle_url: String? = null
+    val scanQrCodeLauncher = registerForActivityResult(ScanQRCode()) { result ->
+        // handle QRResult
+        when(result){
+            is QRResult.QRSuccess -> {
+                fromRemote = true
+                handleConnectUri(Uri.parse(result.content.rawValue))
+            }
+            else -> {}
+        }
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,13 +65,6 @@ class MainActivity : AppCompatActivity() {
         walletSignFragment = WalletSignFragment()
         initView()
         setListener()
-        Web3MQClient.setOnWebsocketClosedCallback(object : OnWebsocketClosedCallback {
-                override fun onClose() {
-                    //TODO showReconnectDialog
-//                Web3MQClient.getInstance().reconnect();
-//                Web3MQSign.getInstance().reconnect();
-                }
-            })
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.fl_content, walletSignFragment!!).commitAllowingStateLoss()
         DefaultSPHelper.clear()
@@ -134,7 +132,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleConnectUri(uri: Uri?) {
-
         Log.i(TAG,"handleConnectUri")
         val request: ConnectRequest = ConvertUtil.convertDeepLinkToConnectRequest(uri.toString())
         if (request.method != null && request.method.equals("provider_authorization")) {
@@ -144,7 +141,6 @@ class MainActivity : AppCompatActivity() {
                     if (!fromRemote) {
                         moveTaskToBack(true)
                     }
-
                 }
 
                 override fun connectReject() {
@@ -218,14 +214,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setListener() {
-//        iv_scan!!.setOnClickListener {
-//            //scan
-//            ScanCodeConfig.create(this@MainActivity)
-//                .setStyle(ScanStyle.WECHAT)
-//                .setPlayAudio(false)
-//                .buidler() //跳转扫码页   扫码页可自定义样式
-//                .start(ScanCodeActivity::class.java)
-//        }
+        iv_scan.setOnClickListener {
+            //scan
+            scanQrCodeLauncher.launch(null)
+        }
     }
 
     fun hideSignFragment() {

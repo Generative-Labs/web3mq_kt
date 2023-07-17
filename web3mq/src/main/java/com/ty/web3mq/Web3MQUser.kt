@@ -11,6 +11,7 @@ import com.ty.web3mq.interfaces.*
 import com.ty.web3mq.utils.*
 import org.bouncycastle.jcajce.provider.digest.SHA3
 import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.util.*
 
@@ -112,9 +113,15 @@ Issued At: $str_date"""
         val md: MessageDigest =
             SHA3.Digest224()
         val magicString =
-            "web3mq" + wallet_type + ":" + wallet_address + keyIndex + password + "web3mq"
+            "\$web3mq" + wallet_type + ":" + wallet_address + keyIndex + password + "web3mq\$"
+        Log.i(TAG, magicString)
         val messageDigest = md.digest(magicString.toByteArray())
-        return Base64.encodeToString(messageDigest, Base64.NO_WRAP)
+        Log.i(TAG, Ed25519.bytesToHexString(messageDigest))
+        val res = Base64.encodeToString(Ed25519.bytesToHexString(messageDigest).toByteArray(
+            StandardCharsets.UTF_8), Base64.NO_WRAP)
+//        val res = Base64.encodeToString(messageDigest, Base64.NO_WRAP)
+        Log.i(TAG, "generateMagicString:"+res)
+        return res
     }
 
     //    public String[] generateKeyPair(String keyGenerateSign){

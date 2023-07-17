@@ -40,7 +40,7 @@ class NotificationHistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(it
                     btn_follow.isEnabled = false
                 } else {
                     btn_follow.setBackgroundResource(com.ty.module_common.R.drawable.shape_bg_btn_follow)
-                    btn_follow.setTextColor(Color.parseColor("#FFFFFF"))
+                    btn_follow.setTextColor(itemView.context.getColor(com.ty.module_common.R.color.color_base_white))
                     btn_follow.text = "Follow"
                     btn_follow.isEnabled = true
                 }
