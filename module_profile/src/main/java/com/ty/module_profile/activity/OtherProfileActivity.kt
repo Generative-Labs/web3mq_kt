@@ -103,6 +103,10 @@ class OtherProfileActivity : BaseActivity() {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
                     startActivity(intent)
                 }
+
+                override fun onError(error: String) {
+                    TODO("Not yet implemented")
+                }
             })
         }
         Web3MQSign.setOnConnectResponseCallback(object : OnConnectResponseCallback{
