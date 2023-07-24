@@ -36,7 +36,7 @@ import com.zou.module_chat.fragment.ChatsFragment
 import java.util.ArrayList
 
 class HomePageActivity : AppCompatActivity(),ConnectCallback {
-    private lateinit var currentFragment: Fragment
+    private var currentFragment: Fragment? = null
     private lateinit var bottom_navigation_view: BottomNavigationView
     private lateinit var cl_reconnect: ConstraintLayout
     private lateinit var btn_reconnect: Button

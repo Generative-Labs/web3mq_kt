@@ -23,12 +23,14 @@ class StartActivity : BaseActivity(), ConnectCallback{
     private lateinit var tv_check_out: TextView
     private lateinit var iv_logo: ImageView
     private lateinit var cl_reconnect: ConstraintLayout
+    private lateinit var cl_loading: ConstraintLayout
     private lateinit var btn_reconnect: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent(R.layout.activity_start)
         initView()
         setListener()
+        cl_loading.visibility = View.VISIBLE
         Web3MQClient.init(this@StartActivity, AppConfig.APIKey)
         Web3MQClient.startConnect(this)
     }
@@ -39,6 +41,7 @@ class StartActivity : BaseActivity(), ConnectCallback{
         iv_logo = findViewById(R.id.iv_logo)
         cl_reconnect = findViewById(R.id.cl_reconnect)
         btn_reconnect = findViewById(R.id.btn_reconnect)
+        cl_loading = findViewById(R.id.cl_loading)
     }
 
     private fun setListener() {
@@ -54,6 +57,7 @@ class StartActivity : BaseActivity(), ConnectCallback{
     }
 
     override fun onSuccess() {
+        runOnUiThread { cl_loading.visibility = View.GONE }
         if(Web3MQUser.hasLogged()){
             ModuleLogin.onLoginSuccessCallback?.onLoginSuccess();
             this@StartActivity.finish()
@@ -62,10 +66,13 @@ class StartActivity : BaseActivity(), ConnectCallback{
 
     override fun onFail(error: String) {
         Log.i("StartActivity","onFail startConnect error: $error")
-        runOnUiThread { cl_reconnect.visibility = View.VISIBLE }
+        runOnUiThread {
+            cl_loading.visibility = View.GONE
+            cl_reconnect.visibility = View.VISIBLE
+        }
     }
 
     override fun alreadyConnected() {
-
+        runOnUiThread { cl_loading.visibility = View.GONE }
     }
 }
