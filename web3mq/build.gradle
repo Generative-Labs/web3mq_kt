@@ -11,7 +11,7 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId = 'com.github.Generative-Labs'
                 artifactId = 'web3-mq-kt'
-                version = '1.0.7'
+                version = '1.0.8'
             }
         }
     }
