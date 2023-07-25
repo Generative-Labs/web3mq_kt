@@ -11,7 +11,7 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId = 'com.github.Generative-Labs'
                 artifactId = 'web3-mq-kt'
-                version = '1.0.4-alpha'
+                version = '1.0.7'
             }
         }
     }
@@ -88,8 +88,8 @@ dependencies {
     api 'org.web3j:core:4.8.7-android', {
         exclude module: "okhttp"
     }
-    implementation "com.goterl:lazysodium-android:5.1.0@aar"
-    implementation "net.java.dev.jna:jna:5.8.0@aar"
+//    implementation "com.goterl:lazysodium-android:5.1.0@aar"
+//    implementation "net.java.dev.jna:jna:5.8.0@aar"
     api 'org.mitre.secretsharing:secret-sharing-scheme:1.2.0'
     api 'com.github.kittinunf.fuel:fuel:2.3.1'
     api 'com.github.kittinunf.fuel:fuel-android:2.3.1'
